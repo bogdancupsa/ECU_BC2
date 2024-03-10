@@ -1,2 +1,2 @@
 # ECU_BC2
-RPI5 ECU
+Adaptive autosar - rpi5 repo
