@@ -1,2 +1,2 @@
-# ECU_BC2
-Adaptive autosar - rpi5 repo
+# ECU_BC1
+Adaptive Autosar - RPI3B repo
