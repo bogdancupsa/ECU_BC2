@@ -15,7 +15,7 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    UDPSocket sendSocket = UDPSocket(12345);
+    UDPSocket receiveSocket(12345);
     
     while (!exitCondition) 
     {
@@ -31,6 +31,7 @@ void Scheduler::run (void)
         }
 
         // sendSocket.send("192.168.1.11", 12345, "Hello");
+        receiveSocket.receive();
 
     }
 
