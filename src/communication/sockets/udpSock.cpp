@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-UDPSocket::UDPSocket(unsigned short port) 
+UDPSocket::UDPSocket(unsigned short port, bool bind_socket)
 {
     // socket creation
     socket_fd_ = socket(AF_INET, SOCK_DGRAM, 0);
@@ -19,16 +19,28 @@ UDPSocket::UDPSocket(unsigned short port)
     addr_.sin_port = htons(port);
     addr_.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    // bind
-    if ( bind(socket_fd_, 
-             reinterpret_cast<struct sockaddr*>(&addr_),
-             sizeof(addr_) ) < 0 )
-    {
-        throw std::runtime_error("Error binding socket");
+    if (false != bind_socket)
+    { /* bind - no binding for sender */ 
+        if (bind(socket_fd_, 
+            reinterpret_cast<struct sockaddr*>(&addr_),
+            sizeof(addr_) ) < 0 )
+        {
+            throw std::runtime_error("Error binding socket");
+        }
     }
+
+    else
+    { /* skip biding for receiver */
+        /* Nothing */   
+    }    
 }
 
-void UDPSocket::send (const std::string& ip, unsigned short port, const std::string& message)
+UDPSocket::~UDPSocket()
+{
+    /* nothing */
+}
+
+void UDPSocket::send (const std::string& ip, unsigned short port, const uint8_t* message, size_t message_size)
 {
     struct sockaddr_in dest_addr;
     std::memset(&dest_addr, 0, sizeof(dest_addr));
@@ -39,15 +51,15 @@ void UDPSocket::send (const std::string& ip, unsigned short port, const std::str
 
     sendto( 
         socket_fd_, 
-        message.c_str(), 
-        message.length(), 
+        message, 
+        message_size, 
         0, 
-        reinterpret_cast<const sockaddr*>(&dest_addr), 
+        (const sockaddr*)&dest_addr, 
         sizeof(dest_addr)
     );
 }
 
-void UDPSocket::receive (void)
+std::string UDPSocket::receive (void)
 {
     char buffer[1024];
     struct sockaddr_in in_addr;
@@ -59,10 +71,10 @@ void UDPSocket::receive (void)
             buffer, 
             sizeof(buffer) - 1, 
             0, 
-            reinterpret_cast<sockaddr*>(&addr_), 
-            &len
-        );
+            reinterpret_cast<sockaddr*>(&in_addr), 
+            &len);
 
     buffer[n] = '\0';
     std::cout << "Received: " << buffer << std::endl;
+    return std::string(buffer);
 }

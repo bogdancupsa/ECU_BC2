@@ -1,10 +1,9 @@
 #include "Scheduler.h"
-// #include "SomeipService.h"
+#include "SomeipService.h"
 // #include "CanService.h"
 #include "Tasks.h"
 #include "udpSock.h"
-
-// SomeipService someip_service;
+#include <iostream>
 
 void Scheduler::initialize (void) 
 {  
@@ -15,8 +14,6 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    UDPSocket receiveSocket(12345);
-    
     while (!exitCondition) 
     {
         if ( eventSetter.check1msEvent() ) 
@@ -26,12 +23,27 @@ void Scheduler::run (void)
 
         if ( eventSetter.check10msEvent() ) 
         {
-        
             execute10msTask();
         }
 
-        // sendSocket.send("192.168.1.11", 12345, "Hello");
-        receiveSocket.receive();
+        SomeIPMessage request_msg = receive_someip_msg();
+
+        if (REQUEST == request_msg.someip_header.message_type)
+        {
+            printf("Request for pedal status received");
+
+            SomeIPMessage response_msg;
+            response_msg.someip_header.message_id = 1;
+            response_msg.someip_header.length = 5;
+            response_msg.someip_header.protocol_version = 1;
+            response_msg.someip_header.message_type = RESPONSE;
+            response_msg.someip_header.return_code = 0;
+
+            std::memcpy(response_msg.someip_payload, "OK", 2);
+
+            send_someip_msg(&response_msg, "192.168.1.10", 12345);
+
+        }
 
     }
 
