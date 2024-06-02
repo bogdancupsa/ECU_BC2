@@ -1,11 +1,11 @@
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -pthread -Isrc/application -Isrc/scheduler -Isrc/communication -Isrc/communication/sockets -Isrc/services -Isrc/services/someip -Isrc/diagnosis -Isrc/diagnosis/DoIP
+CXXFLAGS := -std=c++17 -Wall -Wextra -pthread -Isrc/application -Isrc/scheduler -Isrc/communication -Isrc/communication/sockets -Isrc/services -Isrc/services/someip -Isrc/diagnosis -Isrc/diagnosis/DoIP -Isrc/communication/can
 LDFLAGS := 
 BUILD_DIR := build
 
-SRC_DIRS := src/scheduler src/communication/sockets src/services/someip src/diagnosis/DoIP
+SRC_DIRS := src/scheduler src/communication/sockets src/services/someip src/diagnosis/DoIP src/communication/can
 
-SOURCES := $(wildcard src/scheduler/*.cpp) $(wildcard src/communication/sockets/*.cpp) $(wildcard src/services/someip/*.cpp) $(wildcard src/diagnosis/DoIP/*.cpp)
+SOURCES := $(wildcard src/scheduler/*.cpp) $(wildcard src/communication/sockets/*.cpp) $(wildcard src/services/someip/*.cpp) $(wildcard src/diagnosis/DoIP/*.cpp) $(wildcard src/communication/can/*.cpp)
 
 OBJECTS := $(patsubst src/%,$(BUILD_DIR)/%,$(SOURCES:.cpp=.o))
 
@@ -20,6 +20,7 @@ directories:
 	@mkdir -p $(BUILD_DIR)/communication/sockets
 	@mkdir -p $(BUILD_DIR)/services/someip
 	@mkdir -p $(BUILD_DIR)/diagnosis/DoIP
+	@mkdir -p $(BUILD_DIR)/communication/can
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)

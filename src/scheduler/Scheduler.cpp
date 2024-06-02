@@ -1,19 +1,27 @@
 #include "Scheduler.h"
 #include "SomeipService.h"
-// #include "CanService.h"
+#include "CanInterface.h"
 #include "Tasks.h"
 #include "udpSock.h"
+#include "DoIP.h"
 #include <iostream>
 
 void Scheduler::initialize (void) 
 {  
     highResTimer.start();
-
-    // TODO - initialize canService
 }
 
 void Scheduler::run (void) 
 {
+    CanInterface can("can0");
+    
+    if (!can.initialize())
+    {
+        std::cout << "Failed to initialize can" << std::endl;
+    }
+
+    struct can_frame can_socket_frame;
+
     while (!exitCondition) 
     {
         if ( eventSetter.check1msEvent() ) 
@@ -24,6 +32,17 @@ void Scheduler::run (void)
         if ( eventSetter.check10msEvent() ) 
         {
             execute10msTask();
+        }
+
+        if (can.readMessage(can_socket_frame))
+        {
+            if (0x036 == can_socket_frame.can_id)
+            {
+                int acceleration = can_socket_frame.data[0];
+                int brake = can_socket_frame.data[1];
+
+                std::cout << "Acc: " << acceleration << "\nBrk: " << brake << std::endl;
+            }
         }
 
 #if TEST_SESSION_ACTIVE == 0
