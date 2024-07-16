@@ -45,8 +45,13 @@ void Scheduler::run (void)
             response_msg.someip_header.return_code = 0;
 
             std::memcpy(response_msg.someip_payload, "OK", 2);
-
+std::cout << "Sending SOME/IP response message" << std::endl;
             send_someip_msg(&response_msg, "192.168.1.10", 12345);
+        }
+
+        else
+        {
+            std::cout << "No valid request received" << std::endl;
         }
 #elif TEST_SESSION_ACTIVE == 1
 
