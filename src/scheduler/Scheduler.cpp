@@ -39,7 +39,7 @@ void Scheduler::run (void)
 
             SomeIPMessage response_msg;
             response_msg.someip_header.message_id = 1;
-            response_msg.someip_header.length = 5;
+            response_msg.someip_header.length = 2;
             response_msg.someip_header.protocol_version = 1;
             response_msg.someip_header.message_type = RESPONSE;
             response_msg.someip_header.return_code = 0;
