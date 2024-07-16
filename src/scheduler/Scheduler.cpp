@@ -27,7 +27,6 @@ void Scheduler::run (void)
         if ( eventSetter.check1msEvent() ) 
         {
             execute1msTask();
-            printf("1 ms task");
         }
 
         if ( eventSetter.check10msEvent() ) 
@@ -66,7 +65,7 @@ void Scheduler::run (void)
             send_someip_msg(&response_msg, "192.168.1.10", 12345);
 
         }
-#else
+#elif TEST_SESSION_ACTIVE == 1
 
         DoIPMessage request_msg = receive_doip(13400);
         
