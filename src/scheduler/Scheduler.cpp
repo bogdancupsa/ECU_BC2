@@ -28,9 +28,6 @@ void Scheduler::run (void)
         }
 
         std::string message = receiveSocket.receive();
-        if (!message.empty()) {
-            std::cout << "Received message: " << message << std::endl;
-        }
 
 #if TEST_SESSION_ACTIVE == 0
 
