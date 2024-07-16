@@ -13,42 +13,24 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    // CanInterface can("can0");
-    
-    // if (!can.initialize())
-    // {
-    //     std::cout << "Failed to initialize can" << std::endl;
-    // }
-
-    // struct can_frame can_socket_frame;
-
-    UDPSocket receiveSocket(12345);
-
+    UDPSocket receiveSocket(12345, true);
 
     while (!exitCondition) 
     {
-        if ( eventSetter.check1msEvent() ) 
+        if (eventSetter.check1msEvent()) 
         {
             execute1msTask();
         }
 
-        if ( eventSetter.check10msEvent() ) 
+        if (eventSetter.check10msEvent()) 
         {
             execute10msTask();
         }
 
-        receiveSocket.receive();
-
-        // if (can.readMessage(can_socket_frame))
-        // {
-        //     if (0x036 == can_socket_frame.can_id)
-        //     {
-        //         int acceleration = can_socket_frame.data[0];
-        //         int brake = can_socket_frame.data[1];
-
-        //         std::cout << "Acc: " << acceleration << "\nBrk: " << brake << std::endl;
-        //     }
-        // }
+        std::string message = receiveSocket.receive();
+        if (!message.empty()) {
+            std::cout << "Received message: " << message << std::endl;
+        }
 
 #if TEST_SESSION_ACTIVE == 0
 
@@ -68,7 +50,6 @@ void Scheduler::run (void)
             std::memcpy(response_msg.someip_payload, "OK", 2);
 
             send_someip_msg(&response_msg, "192.168.1.10", 12345);
-
         }
 #elif TEST_SESSION_ACTIVE == 1
 
