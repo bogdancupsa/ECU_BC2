@@ -13,20 +13,21 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    CanInterface can("can0");
+    // CanInterface can("can0");
     
-    if (!can.initialize())
-    {
-        std::cout << "Failed to initialize can" << std::endl;
-    }
+    // if (!can.initialize())
+    // {
+    //     std::cout << "Failed to initialize can" << std::endl;
+    // }
 
-    struct can_frame can_socket_frame;
+    // struct can_frame can_socket_frame;
 
     while (!exitCondition) 
     {
         if ( eventSetter.check1msEvent() ) 
         {
             execute1msTask();
+            printf("1 ms task");
         }
 
         if ( eventSetter.check10msEvent() ) 
@@ -34,16 +35,16 @@ void Scheduler::run (void)
             execute10msTask();
         }
 
-        if (can.readMessage(can_socket_frame))
-        {
-            if (0x036 == can_socket_frame.can_id)
-            {
-                int acceleration = can_socket_frame.data[0];
-                int brake = can_socket_frame.data[1];
+        // if (can.readMessage(can_socket_frame))
+        // {
+        //     if (0x036 == can_socket_frame.can_id)
+        //     {
+        //         int acceleration = can_socket_frame.data[0];
+        //         int brake = can_socket_frame.data[1];
 
-                std::cout << "Acc: " << acceleration << "\nBrk: " << brake << std::endl;
-            }
-        }
+        //         std::cout << "Acc: " << acceleration << "\nBrk: " << brake << std::endl;
+        //     }
+        // }
 
 #if TEST_SESSION_ACTIVE == 0
 
