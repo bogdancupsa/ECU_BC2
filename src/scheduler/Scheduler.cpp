@@ -31,6 +31,7 @@ void Scheduler::run (void)
 
 #if TEST_SESSION_ACTIVE == 0
 
+        std::cout << "About to call receive_someip_msg" << std::endl;
         SomeIPMessage request_msg = receive_someip_msg();
 
         if (REQUEST == request_msg.someip_header.message_type)
@@ -45,7 +46,7 @@ void Scheduler::run (void)
             response_msg.someip_header.return_code = 0;
 
             std::memcpy(response_msg.someip_payload, "OK", 2);
-std::cout << "Sending SOME/IP response message" << std::endl;
+            
             send_someip_msg(&response_msg, "192.168.1.10", 12345);
         }
 
