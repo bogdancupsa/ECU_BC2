@@ -59,7 +59,6 @@ void UDPSocket::send(const std::string& ip, unsigned short port, const uint8_t* 
 
 std::string UDPSocket::receive()
 {
-    std::cout<<"i am here";
     char buffer[1024];
     struct sockaddr_in in_addr;
     socklen_t len = sizeof(in_addr);
