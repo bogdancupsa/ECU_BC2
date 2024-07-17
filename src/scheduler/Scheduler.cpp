@@ -13,7 +13,7 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    // UDPSocket receiveSocket(12345, true);
+    UDPSocket receiveSocket(12345, true);
 
     while (!exitCondition) 
     {
@@ -25,24 +25,9 @@ void Scheduler::run (void)
         if (eventSetter.check10msEvent()) 
         {
             execute10msTask();
-            DoIPMessage request_msg = receive_doip(13400);
-        
-        if (0x0003 == request_msg.doip_header.payload_type)
-        {
-            std::cout << "Received vin request" << std::endl;
-
-            DoIPMessage response_msg;
-            response_msg.doip_header.protocol_version = 0x02;
-            response_msg.doip_header.inverse_protocol_version = 0xFD;
-            response_msg.doip_header.payload_type = 0x0004; /* vin response */
-            response_msg.doip_header.payload_length = 1;
-            response_msg.doip_payload[0] = 0x11;
-
-            send_doip(&response_msg, "192.168.1.10", 13401);
-        } 
         }
 
-        // std::string message = receiveSocket.receive();
+        std::string message = receiveSocket.receive();
 
 #if TEST_SESSION_ACTIVE == 0
 
@@ -69,7 +54,21 @@ void Scheduler::run (void)
             std::cout << "No valid request received" << std::endl;
         }
 #elif TEST_SESSION_ACTIVE == 1
+        DoIPMessage request_msg = receive_doip(13400);
+        
+        if (0x0003 == request_msg.doip_header.payload_type)
+        {
+            std::cout << "Received vin request" << std::endl;
 
+            DoIPMessage response_msg;
+            response_msg.doip_header.protocol_version = 0x02;
+            response_msg.doip_header.inverse_protocol_version = 0xFD;
+            response_msg.doip_header.payload_type = 0x0004; /* vin response */
+            response_msg.doip_header.payload_length = 1;
+            response_msg.doip_payload[0] = 0x11;
+
+            send_doip(&response_msg, "192.168.1.10", 13401);
+        } 
         
 
 #endif
