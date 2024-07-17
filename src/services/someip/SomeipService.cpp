@@ -36,9 +36,9 @@ void send_someip_msg (SomeIPMessage* message, const char* ip, unsigned short por
 
 SomeIPMessage receive_someip_msg (void)
 {
-    UDPSocket socket(12345, true); /* bind for receiver */
+    UDPSocket socket(12345); 
     SomeIPMessage message;
-
+std::cout << "Sunt aici" << std::endl;
     std::string data = socket.receive(); 
 
     if (!data.empty())
