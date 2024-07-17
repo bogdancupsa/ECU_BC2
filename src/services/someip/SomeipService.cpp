@@ -44,6 +44,8 @@ SomeIPMessage receive_someip_msg (void)
     if (!data.empty())
     {
         deserialize_message(reinterpret_cast<const uint8_t*>(data.c_str()), &message);
+    } else {
+        std::cout << "No data received" << std::endl;
     }
 
     return message;
