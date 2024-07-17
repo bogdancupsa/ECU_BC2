@@ -62,7 +62,7 @@ std::string UDPSocket::receive()
     char buffer[1024];
     struct sockaddr_in in_addr;
     socklen_t len = sizeof(in_addr);
-    std::cout<<"i am here"
+    std::cout<<"i am here";
     ssize_t n = recvfrom(
         socket_fd_,
         buffer,
