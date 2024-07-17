@@ -13,7 +13,7 @@ void Scheduler::initialize (void)
 
 void Scheduler::run (void) 
 {
-    // UDPSocket receiveSocket(12345, true);
+    UDPSocket receiveSocket(12345, true);
 
     while (!exitCondition) 
     {
@@ -27,11 +27,10 @@ void Scheduler::run (void)
             execute10msTask();
         }
 
-        // std::string message = receiveSocket.receive();
+        std::string message = receiveSocket.receive();
 
 #if TEST_SESSION_ACTIVE == 0
 
-        std::cout << "About to call receive_someip_msg" << std::endl;
         SomeIPMessage request_msg = receive_someip_msg();
 
         if (REQUEST == request_msg.someip_header.message_type)
