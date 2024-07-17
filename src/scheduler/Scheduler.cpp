@@ -47,7 +47,7 @@ void Scheduler::run (void)
 
             std::memcpy(response_msg.someip_payload, "OK", 2);
             
-            send_someip_msg(&response_msg, "192.168.1.10", 12345);
+            send_someip_msg(&response_msg, "192.168.1.10", 12346);
         }
 
         else
