@@ -38,9 +38,9 @@ SomeIPMessage receive_someip_msg (void)
 {
     UDPSocket socket(12345); 
     SomeIPMessage message;
-std::cout << "Sunt aici" << std::endl;
-    std::string data = socket.receive(); 
 
+    std::string data = socket.receive(); 
+std::cout << "Sunt aici" << std::endl;
     if (!data.empty())
     {
         deserialize_message(reinterpret_cast<const uint8_t*>(data.c_str()), &message);
